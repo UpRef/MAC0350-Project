@@ -1,14 +1,22 @@
-package com.upref
+package com.upref.models
+import org.jetbrains.exposed.sql.*
 
-class Paper {
-    var id: String
+data class Folder (
+    var id: Integer,
     var title: String
-    var authors: MutableList<String>
-    var abstract: String
-    var keywords: MutableList<String>
-    var links: MutableList<String>
+)
 
+object Folders : Table() {
+    val id = integer("id").autoIncrement()
+    val title = varchar("title", 128)
+
+    override val primaryKey = PrimaryKey(id)
+}
+
+
+/*
     constructor(id: String,
+
                 title: String,
                 authors: MutableList<String>,
                 abstract: String,
@@ -26,3 +34,4 @@ class Paper {
         TODO("we don't have a database yet.")
     }
 }
+*/
