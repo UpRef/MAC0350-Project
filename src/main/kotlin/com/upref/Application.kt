@@ -1,5 +1,6 @@
 package com.upref
 
+import com.upref.dao.*
 import com.upref.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -11,5 +12,7 @@ fun main() {
 }
 
 fun Application.module() {
+    DatabaseSingleton.init()
     configureRouting()
+    configureTemplating()
 }

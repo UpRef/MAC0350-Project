@@ -2,7 +2,7 @@ package com.upref.models
 import org.jetbrains.exposed.sql.*
 
 data class Folder (
-    var id: Integer,
+    var id: Int,
     var title: String
 )
 

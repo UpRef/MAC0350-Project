@@ -10,15 +10,14 @@ class FolderTest {
     fun testAddPaper() {
         val empty = mutableListOf<Paper>()
         val paper = Paper(
-            "paper1",
-            "title",
-            mutableListOf<String>(),
+            42,
+            "Title",
+            "author A, author B",
             "abstract",
-            mutableListOf<String>(),
-            mutableListOf<String>(),
+            "keyword1, keyword2",
+            "link1, link2",
         )
-        val folder = Folder("folder1", empty)
-        folder.addPaper(paper)
+        val folder = Folder(52, "title")
         //assert blabla
     }
 

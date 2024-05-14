@@ -2,12 +2,12 @@ package com.upref.models
 import org.jetbrains.exposed.sql.*
 
 data class Paper (
-    var id: Integer,
+    var id: Int,
     var title: String,
-    var authors: MutableList<String>,
+    var authors: String,//MutableList<String>,
     var abstract: String,
-    var keywords: MutableList<String>,
-    var links: MutableList<String>
+    var keywords: String,//MutableList<String>,
+    var links: String//MutableList<String>
 )
 
 object Papers : Table() {
