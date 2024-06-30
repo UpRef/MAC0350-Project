@@ -1,1 +1,1 @@
-rootProject.name = "Upref"
+rootProject.name = "UpRef"
