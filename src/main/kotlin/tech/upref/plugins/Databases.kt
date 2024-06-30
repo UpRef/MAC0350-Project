@@ -16,7 +16,7 @@ fun Application.configureDatabases() {
 
     routing {
         // Create paper
-`        post("/papers") {
+        post("/papers") {
             val paper = call.receive<Paper>()
             val id = paperService.create(paper)
             call.respond(HttpStatusCode.Created, id)
@@ -42,7 +42,7 @@ fun Application.configureDatabases() {
             call.respond(HttpStatusCode.OK)
         }
 
-        // Delete city
+        // Delete paper
         delete("/papers/{id}") {
             val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
             paperService.delete(id)
@@ -79,7 +79,7 @@ fun Application.configureDatabases() {
             call.respond(HttpStatusCode.OK)
         }
 
-        // Delete city
+        // Delete folder
         delete("/folders/{id}") {
             val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
             folderService.delete(id)
@@ -117,10 +117,11 @@ fun Application.configureDatabases() {
             call.respond(HttpStatusCode.OK)
         }
 
-        // Delete city
-        delete("/folders/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            folderService.delete(id)
+        // Delete folder
+        delete("/delete/paper/{paper_id}/from/folder/{folder_id}") {
+            val folder_id = call.parameters["folder_id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
+            val paper_id = call.parameters["paper_id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
+            paperFolderService.delete(paper_id, folder_id)
             call.respond(HttpStatusCode.OK)
         }
     }
@@ -186,6 +187,8 @@ fun Application.configureDatabases() {
  * @return [Connection] that represent connection to the database. Please, don't forget to close this connection when
  * your application shuts down by calling [Connection.close]
  * */
+
+
 fun Application.connectToPostgres(embedded: Boolean): Connection {
     Class.forName("org.postgresql.Driver")
     if (embedded) {

@@ -77,8 +77,6 @@ class PaperFolderService(private val connection: Connection) {
         }
         return@withContext papers
     }
-
-
     // Delete a paper from a folder
     suspend fun delete(paper_id: Int, folder_id: Int) = withContext(Dispatchers.IO) {
         val statement = connection.prepareStatement(DELETE_PAPER_FROM_FOLDER)
