@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca</title>
+    <link rel="stylesheet" href="./search_tool/search-style.css">
+</head>
+
+<body>
+
+    <div class="box">
+        <form id="search-form">
+            <div class="input_box">
+                <input type="text" id="search-input" placeholder="Busca..." required>
+                <div class="selection">
+                    <p id="selected-category">title</p>
+                </div>
+                <div class="categories">
+                    <p class="option">title</p>
+                    <p class="option">authors</p>
+                    <p class="option">abstract</p>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let selection = document.querySelector(".selection");
+        let selectedText = document.querySelector(".selection p");
+        let categories = document.querySelector(".categories");
+        let options = document.querySelectorAll(".categories p");
+
+        selection.onclick = function () {
+            categories.classList.toggle("active");
+        }
+
+        options.forEach(option => {
+            option.onclick = function () {
+                selectedText.innerHTML = option.innerHTML;
+                categories.classList.toggle("active");
+            }
+        });
+
+        document.getElementById("search-input").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                let query = document.getElementById("search-input").value;
+                let category = document.getElementById("selected-category").innerText;
+                
+                fetch(`your-api-endpoint?query=${query}&category=${category}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // Handle the JSON response here
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        });
+
+        document.getElementById("search-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            let query = document.getElementById("search-input").value;
+            let category = document.getElementById("selected-category").innerText;
+            
+            fetch(`your-api-endpoint?query=${query}&category=${category}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Handle the JSON response here
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+
+
+</body>
+
+</html>
