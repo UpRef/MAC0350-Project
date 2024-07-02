@@ -6,12 +6,13 @@ import java.sql.Connection
 import java.sql.Statement
 
 @Serializable
-data class Folder(val name: String, val user_id: Int)
+data class Folder(val name: String, val user_id: Int, val id: Int)
 class FolderService(private val connection: Connection) {
     companion object {
         private const val CREATE_TABLE_FOLDERS =
             "CREATE TABLE FOLDERS (ID SERIAL PRIMARY KEY, NAME TEXT, USER_ID TEXT);"
         private const val SELECT_FOLDER_BY_ID = "SELECT name, user_id FROM folders WHERE id = ?"
+        private const val SELECT_FOLDERS_BY_USER_ID = "SELECT id, name FROM folders WHERE user_id = ?"
         private const val INSERT_FOLDER = "INSERT INTO folders (name, user_id) VALUES (?, ?)"
         private const val UPDATE_FOLDER = "UPDATE folders SET name = ? WHERE id = ?"
         private const val DELETE_FOLDER = "DELETE FROM folders WHERE id = ?"
@@ -40,6 +41,24 @@ class FolderService(private val connection: Connection) {
         }
     }
 
+    // Get all folders from a single user
+    suspend fun getFoldersFromUser(userId: Int): List<Folder> = withContext(Dispatchers.IO) {
+        val statement = connection.prepareStatement(SELECT_FOLDERS_BY_USER_ID)
+        statement.setInt(1, userId)
+        val resultSet = statement.executeQuery()
+        val folders = mutableListOf<Folder>()
+
+        if (resultSet.next()) {
+            val folderId = resultSet.getInt("id")
+            val name = resultSet.getString("name")
+            folders.add(Folder(name, userId, folderId))
+        } else {
+            throw Exception("Record not found")
+        }
+
+        return@withContext folders
+    }
+
     // Read a folder
     suspend fun read(id: Int): Folder = withContext(Dispatchers.IO) {
         val statement = connection.prepareStatement(SELECT_FOLDER_BY_ID)
@@ -50,7 +69,7 @@ class FolderService(private val connection: Connection) {
             val name = resultSet.getString("name")
             val userId = resultSet.getInt("user_id")
 
-            return@withContext Folder(name, userId)
+            return@withContext Folder(name, userId, id)
         } else {
             throw Exception("Record not found")
         }

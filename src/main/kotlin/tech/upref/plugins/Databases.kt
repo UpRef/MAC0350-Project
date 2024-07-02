@@ -85,6 +85,18 @@ fun Application.configureDatabases() {
             folderService.delete(id)
             call.respond(HttpStatusCode.OK)
         }
+
+        // Get Folders From User
+        get("/folders/from/user/{id}") {
+            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
+
+            try {
+                val folders = folderService.getFoldersFromUser(id)
+                call.respond(HttpStatusCode.OK, folders)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
     }
 
 
