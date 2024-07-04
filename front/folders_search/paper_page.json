@@ -1,0 +1,9 @@
+{
+  "id":"supr-con/9609002",
+  "authors":"Balam A. Willemsen, J. S. Derov and S.Sridhar (Physics Department,\n  Northeastern University and Rome Laboratory, Hanscom AFB)",
+  "title":"Critical State Flux Penetration and Linear Microwave Vortex Response in\n  YBa_2Cu_3O_{7-x} Films",
+  "journal-ref":null,
+  "doi":"10.1103/PhysRevB.56.11989",
+  "categories":"supr-con cond-mat.supr-con",
+  "abstract":"  The vortex contribution to the dc field (H) dependent microwave surface\nimpedance Z_s = R_s+iX_s of YBa_2Cu_3O_{7-x} thin films was measured using\nsuspended patterned resonators. Z_s(H) is shown to be a direct measure of the\nflux density B(H) enabling a very precise test of models of flux penetration.\nThree regimes of field-dependent behavior were observed: (1) Initial flux\npenetration occurs on very low field scales H_i(4.2K) 100Oe, (2) At moderate\nfields the flux penetration into the virgin state is in excellent agreement\nwith calculations based upon the field-induced Bean critical state for thin\nfilm geometry, parametrized by a field scale H_s(4.2K) J_c*d 0.5T, (3) for very\nhigh fields H >>H_s, the flux density is uniform and the measurements enable\ndirect determination of vortex parameters such as pinning force constants\n\\alpha_p and vortex viscosity \\eta. However hysteresis loops are in\ndisagreement with the thin film Bean model, and instead are governed by the low\nfield scale H_i, rather than by H_s. Geometric barriers are insufficient to\naccount for the observed results.\n"
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca</title>
+    <link rel="stylesheet" href="./search_tool/search-style.css">
+    <script src="./search_tool/seach_script.js"></script>
+    <script>
+        let selection = document.querySelector(".dropdown");
+        let selectedText = document.querySelector(".dropdown p");
+        let categories = document.querySelector(".categories");
+        let options = document.querySelectorAll(".categories p");
+    
+        selection.onclick = function () {
+            categories.classList.toggle("active");
+        }
+        options.forEach(option => {
+            option.onclick = function () {
+                selectedText.innerHTML = option.innerHTML;
+                categories.classList.toggle("active");
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="box">
+        <form id="search-form">
+            <div class="input_box">
+                <input type="text" id="search-input" placeholder="Busca..." required>
+                <div class="selection dropdown">
+                    <p id="selected-category" onclick=>title</p>
+                </div>
+                <div class="categories">
+                    <p class="option">title</p>
+                    <p class="option">authors</p>
+                    <p class="option">abstract</p>
+                </div>
+            </div>
+            <input type="submit">
+        </form>
+    </div>
+
+
+</body>
+
+</html>
