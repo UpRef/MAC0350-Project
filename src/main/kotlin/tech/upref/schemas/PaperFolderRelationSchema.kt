@@ -15,8 +15,9 @@ class PaperFolderService(private val connection: Connection) {
                     "FOREIGN KEY (FOLDER_ID) REFERENCES folders (ID) ON DELETE CASCADE," +
                     "FOREIGN KEY (PAPER_ID) REFERENCES papers (ID) ON DELETE CASCADE);"
         private const val SELECT_PAPERS_IDS_FROM_FOLDER = "SELECT paper_id FROM paperfolders WHERE folder_id = ?"
-        // TODO: WRITE THIS QUERY WITH JOIN
-        private const val SELECT_PAPERS_FROM_FOLDER = "SELECT paper_id FROM paperfolders WHERE folder_id = ?"
+        private const val SELECT_PAPERS_FROM_FOLDER = "SELECT arxiv_id, title, authors, abstract, doi, update_date, creation_date, paper_id, folder_id " +
+                "FROM papers, paperfolders WHERE folder_id = ?"
+        //private const val SELECT_PAPERS_FROM_FOLDER = "SELECT paper_id FROM paperfolders WHERE folder_id = ?"
         private const val INSERT_PAPER_INTO_FOLDER = "INSERT INTO paperfolders (paper_id, folder_id) VALUES (?, ?)"
         private const val DELETE_PAPER_FROM_FOLDER = "DELETE FROM paperfolders WHERE (paper_id = ? AND folder_id = ?)"
     }
@@ -46,7 +47,7 @@ class PaperFolderService(private val connection: Connection) {
 
     // Get a list of papers from a folder
     suspend fun read(folder_id: Int): List<Paper> = withContext(Dispatchers.IO) {
-        val statement = connection.prepareStatement(SELECT_PAPERS_IDS_FROM_FOLDER)
+        val statement = connection.prepareStatement(SELECT_PAPERS_FROM_FOLDER)
         statement.setInt(1, folder_id)
         val resultSet = statement.executeQuery()
         val papers = mutableListOf<Paper>()

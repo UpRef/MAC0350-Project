@@ -12,6 +12,9 @@ class PaperService(private val connection: Connection) {
         private const val CREATE_TABLE_PAPERS =
             "CREATE TABLE PAPERS (ID SERIAL PRIMARY KEY, ARXIV_ID TEXT, TITLE TEXT, AUTHORS TEXT, ABSTRACT TEXT, DOI TEXT, UPDATE_DATE TEXT, CREATION_DATE TEXT);"
         private const val SELECT_PAPER_BY_ID = "SELECT arxiv_id, title, authors, abstract, doi, update_date, creation_date FROM papers WHERE id = ?"
+        private const val SELECT_PAPERS_TITLE_LIKE = "SELECT arxiv_id, title, authors, abstract, doi, update_date, creation_date FROM papers WHERE title LIKE ?"
+        private const val SELECT_PAPERS_AUTHORS_LIKE = "SELECT arxiv_id, title, authors, abstract, doi, update_date, creation_date FROM papers WHERE authors LIKE ?"
+        private const val SELECT_PAPERS_ABSTRACT_LIKE = "SELECT arxiv_id, title, authors, abstract, doi, update_date, creation_date FROM papers WHERE abstract LIKE ?"
         private const val INSERT_PAPER = "INSERT INTO papers (arxiv_id, title, authors, abstract, doi, update_date, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)"
         private const val UPDATE_PAPER = "UPDATE papers SET update_date = ?, abstract = ? WHERE id = ?"
         private const val DELETE_PAPER = "DELETE FROM papers WHERE id = ?"
@@ -64,6 +67,37 @@ class PaperService(private val connection: Connection) {
         } else {
             throw Exception("Record not found")
         }
+    }
+
+    // Search paper by Title
+    suspend fun search(query: String, category: String): List<Paper> = withContext(Dispatchers.IO) {
+        val statement: Statement
+
+        if (category == "title") {
+            statement = connection.prepareStatement(SELECT_PAPERS_TITLE_LIKE)
+        } else if (category == "authors") {
+            statement = connection.prepareStatement(SELECT_PAPERS_AUTHORS_LIKE)
+        } else if (category == "abstract") {
+            statement = connection.prepareStatement(SELECT_PAPERS_ABSTRACT_LIKE)
+        } else {
+            throw Exception("Category not found")
+        }
+
+        statement.setString(1, "%$query%")
+        val resultSet = statement.executeQuery()
+        val papers = mutableListOf<Paper>()
+
+        while (resultSet.next()) {
+            val arxivId = resultSet.getString("arxiv_id")
+            val title = resultSet.getString("title")
+            val authors = resultSet.getString("authors")
+            val abstract = resultSet.getString("abstract")
+            val doi = resultSet.getString("doi")
+            val updateDate = resultSet.getString("update_date")
+            val creationDate = resultSet.getString("creation_date")
+            papers.add(Paper(arxivId, title, authors, abstract, doi, updateDate, creationDate))
+        }
+        return@withContext papers
     }
 
     // Update a paper

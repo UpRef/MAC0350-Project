@@ -48,14 +48,14 @@ class FolderService(private val connection: Connection) {
         val resultSet = statement.executeQuery()
         val folders = mutableListOf<Folder>()
 
-        if (resultSet.next()) {
+        while (resultSet.next()) {
             val folderId = resultSet.getInt("id")
             val name = resultSet.getString("name")
             folders.add(Folder(name, userId, folderId))
-        } else {
+        }
+        if (folders.size == 0) {
             throw Exception("Record not found")
         }
-
         return@withContext folders
     }
 

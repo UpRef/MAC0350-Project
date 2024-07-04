@@ -34,6 +34,19 @@ fun Application.configureDatabases() {
             }
         }
 
+        // Search paper
+        get("/search/{category}/{query}") {
+            val query = call.parameters["query"]?.toString() ?: throw IllegalArgumentException("Invalid query")
+            val category = call.parameters["category"]?.toString() ?: throw IllegalArgumentException("Invalid category")
+
+            try {
+                val papers = paperService.search(query, category)
+                call.respond(HttpStatusCode.OK, papers)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
+
         // Update paper
         put("/papers/{id}") {
             val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
@@ -55,6 +68,7 @@ fun Application.configureDatabases() {
         // Create folder
         post("/folders") {
             val folder = call.receive<Folder>()
+            println(folder);
             val id = folderService.create(folder)
             call.respond(HttpStatusCode.Created, id)
         }
@@ -111,6 +125,18 @@ fun Application.configureDatabases() {
 
         // Read folder
         get("/papers/from/folder/{id}") {
+            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
+
+            try {
+                val papers = paperFolderService.read(id)
+                call.respond(HttpStatusCode.OK, papers)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
+
+        // Read folder
+        get("/papers/ids/from/folder/{id}") {
             val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
 
             try {
